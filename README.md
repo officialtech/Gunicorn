@@ -100,4 +100,3 @@ srw-rw---- 1 www-data www-data 0 Sep 18 13:10 gunicorn_myproject.sock
     ```
 
 
-
