@@ -99,4 +99,12 @@ srw-rw---- 1 www-data www-data 0 Sep 18 13:10 gunicorn_myproject.sock
     sudo journalctl -u gunicorn_myproject -f
     ```
 
+### 7. Test
+- Test the socket using running below command
+- `gunicorn --bind unix:/run/gunicorn-myproject/gunicorn_myproject.sock myproject.wsgi:application`
+- Open new instance of terminal and run
+- `curl --unix-socket unix:/run/gunicorn-myproject/gunicorn_myproject.sock http://localhost/`
+- BOOM!
+`
+
 
