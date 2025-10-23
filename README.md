@@ -104,7 +104,18 @@ srw-rw---- 1 www-data www-data 0 Sep 18 13:10 gunicorn_myproject.sock
 - `gunicorn --bind unix:/run/gunicorn-myproject/gunicorn_myproject.sock myproject.wsgi:application`
 - Open new instance of terminal and run
 - `curl --unix-socket unix:/run/gunicorn-myproject/gunicorn_myproject.sock http://localhost/`
+- You will see somthing like (if you have nothing in root API endpoint)
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+  ```
 - BOOM!
-`
 
 
