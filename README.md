@@ -122,3 +122,42 @@ srw-rw---- 1 www-data www-data 0 Sep 18 13:10 gunicorn_myproject.sock
 - BOOM!
 
 
+
+### NOTE: Must Check
+Adding this line to your unit…
+
+```
+ExecReload=/bin/kill -HUP $MAINPID
+```
+
+…means that when you run:
+
+```
+sudo systemctl reload gunicorn_myproject.service
+```
+
+systemd will send `SIGHUP` to Gunicorn’s **master** process. For Gunicorn, `HUP` triggers a **graceful reload**:
+
+* **Keeps the listening socket open** (no drop in connections).
+* **Spawns new workers** with the (re)loaded config.
+* **Old workers finish in-flight requests** then exit (bounded by `graceful-timeout`).
+* **Reopens log files** and applies config changes in `gunicorn.conf.py`.
+
+What it does **not** do:
+
+* It does **not** re-read the systemd unit (that’s `systemctl daemon-reload`).
+* It does **not** pick up changed **environment variables** from the unit; for env changes, use a full `restart`.
+* If you run Gunicorn with `--preload`, `HUP` **won’t reload application code** (master already has it loaded). In that case, use a full `restart` (or a `USR2` upgrade flow) to get new code.
+
+### When to use reload vs restart for this service
+
+* **Use `reload`** for most code/config deploys (when not using `--preload`) to get near-zero downtime.
+* **Use `restart`** if workers are wedged, you changed env vars / virtualenv / dependencies, or you’re using `--preload` and need new code.
+
+
+
+
+
+
+
+
