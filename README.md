@@ -45,6 +45,9 @@ WorkingDirectory=/var/www/myproject
 # Remove old socket before binding a new one
 ExecStartPre=/bin/rm -f /run/gunicorn-myproject/gunicorn_myproject.sock
 
+# Keeps the listening socket open, Spawns new workers, Old workers finish in-flight requests & Reopens log files
+ExecReload=/bin/kill -HUP $MAINPID
+
 # Start Gunicorn
 ExecStart=/var/www/myproject/venv/bin/gunicorn \
           --access-logfile - \
